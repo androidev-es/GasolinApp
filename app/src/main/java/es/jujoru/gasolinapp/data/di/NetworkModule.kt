@@ -5,6 +5,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import es.jujoru.gasolinapp.core.Constants.BASE_URL
+import es.jujoru.gasolinapp.data.api.APIService
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -14,6 +15,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
+
     @Singleton
     @Provides
     fun providerHttpLoggingInterceptor(): HttpLoggingInterceptor =
@@ -38,5 +40,11 @@ object NetworkModule {
             .client(client)
             .addConverterFactory(MoshiConverterFactory.create())
 
-
+    @Singleton
+    @Provides
+    fun providerAPIService(retrofitBuilder: Retrofit.Builder): APIService =
+        retrofitBuilder
+            .baseUrl(BASE_URL)
+            .build()
+            .create(APIService::class.java)
 }
